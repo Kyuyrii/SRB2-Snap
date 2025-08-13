@@ -1,0 +1,97 @@
+name: srb2
+base: core24
+version: '2.2.15'
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+summary: A 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy
+description: |
+  Sonic Robo Blast 2 is a 3D open-source Sonic the Hedgehog fangame built using a modified version of the Doom Legacy port of Doom. SRB2 is closely inspired by the original Sonic games from the Sega Genesis, and attempts to recreate the design in 3D. It features tons of levels, enemies, speed, and quite a lot of the fun that the original Sonic games provided.
+grade: stable
+confinement: strict
+
+apps:
+  srb2:
+    command: usr/games/SRB2/lsdlsrb2
+    desktop: usr/share/applications/srb2.desktop
+    common-id: org.srb2.SRB2
+    environment:
+      HOME: $SNAP_USER_COMMON
+      SRB2WADDIR: $SNAP/usr/games/SRB2
+    extensions: [kde-neon-6]
+    plugs:
+      - unity7
+      - screen-inhibit-control
+      - audio-playback
+      - network
+      - network-bind
+      - home
+      - removable-media
+      - mount-observe
+      - joystick
+      - bluez
+
+plugs:
+  shared-memory:
+    private: true
+
+parts:
+  srb2:
+    after: [srb2assets]
+    plugin: cmake
+    source: https://github.com/STJr/SRB2.git
+    source-tag: SRB2_release_2.2.15
+    build-packages:
+      - libsdl2-mixer-dev
+      - libsdl2-dev
+      - libupnp-dev
+      - libgme-dev
+      - libopenmpt-dev
+      - libc6-dev
+      - libpng-dev
+      - libcurl4-openssl-dev
+      - nasm
+      - zlib1g-dev
+      - build-essential
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr/games/SRB2
+      - -DCMAKE_BUILD_TYPE=RelWithDebInfo
+      - -DSRB2_CONFIG_USE_GME=ON
+      - -DSRB2_CONFIG_DEV_BUILD=OFF
+      - -DSRB2_SDL2_EXE_NAME=lsdlsrb2
+    stage-packages:
+      - libsdl2-2.0-0
+      - libdecor-0-0
+      - libfluidsynth3
+      - libinstpatch-1.0-2
+      - libjack0
+      - libmodplug1
+      - libopusfile0
+
+  srb2assets:
+    plugin: dump
+    source: https://github.com/STJr/SRB2/releases/download/SRB2_release_2.2.15/SRB2-v2215-Full.zip
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/games/SRB2
+      mv -f models $CRAFT_PART_INSTALL/usr/games/SRB2/
+      mv -f characters.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
+      mv -f models.dat $CRAFT_PART_INSTALL/usr/games/SRB2/
+      mv -f music.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
+      mv -f srb2.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
+      mv -f zones.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
+    prime:
+      - usr/games/SRB2
+
+  srb2-gui-launcher:
+    after: [srb2]
+    plugin: nil
+    source: ./gui-launcher
+    override-build: |
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/applications/
+      mkdir -p $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
+      mv -f srb2.desktop $CRAFT_PART_INSTALL/usr/share/applications/
+      mv -f srb2.png $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
+    prime:
+      - usr/share/applications/srb2.desktop
+      - usr/share/icons/hicolor/scalable/apps/srb2.png
