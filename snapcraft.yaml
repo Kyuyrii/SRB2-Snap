@@ -38,7 +38,6 @@ plugs:
 
 parts:
   srb2:
-    after: [srb2assets]
     plugin: cmake
     source: https://github.com/STJr/SRB2.git
     source-tag: SRB2_release_2.2.15
@@ -60,16 +59,9 @@ parts:
       - -DSRB2_CONFIG_USE_GME=ON
       - -DSRB2_CONFIG_DEV_BUILD=OFF
       - -DSRB2_SDL2_EXE_NAME=lsdlsrb2
-    stage-packages:
-      - libsdl2-2.0-0
-      - libdecor-0-0
-      - libfluidsynth3
-      - libinstpatch-1.0-2
-      - libjack0
-      - libmodplug1
-      - libopusfile0
 
   srb2assets:
+    after: [srb2]
     plugin: dump
     source: https://github.com/STJr/SRB2/releases/download/SRB2_release_2.2.15/SRB2-v2215-Full.zip
     override-build: |
@@ -84,7 +76,7 @@ parts:
       - usr/games/SRB2
 
   srb2-gui-launcher:
-    after: [srb2]
+    after: [srb2assets]
     plugin: nil
     source: ./gui-launcher
     override-build: |
@@ -95,3 +87,23 @@ parts:
     prime:
       - usr/share/applications/srb2.desktop
       - usr/share/icons/hicolor/scalable/apps/srb2.png
+
+  dependencies:
+    after: [srb2-gui-launcher]
+    plugin: nil
+    stage-packages:
+      - libsdl2-2.0-0
+      - libdecor-0-0
+      - libfluidsynth3
+      - libinstpatch-1.0-2
+      - libjack0
+      - libmodplug1
+      - libopusfile0
+    prime:
+      - usr/lib/x86_64-linux-gnu/libdecor-0.so*
+      - usr/lib/x86_64-linux-gnu/libfluidsynth.so*
+      - usr/lib/x86_64-linux-gnu/libinstpatch-1.0.so*
+      - usr/lib/x86_64-linux-gnu/libjack.so*
+      - usr/lib/x86_64-linux-gnu/libmodplug.so*
+      - usr/lib/x86_64-linux-gnu/libopusfile.so*
+      - usr/lib/x86_64-linux-gnu/libSDL2-2.0.so*
