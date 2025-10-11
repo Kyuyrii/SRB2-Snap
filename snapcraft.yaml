@@ -103,10 +103,10 @@ parts:
       - libmodplug1
       - libopusfile0
     prime:
-      - usr/lib/x86_64-linux-gnu/libdecor-0.so*
-      - usr/lib/x86_64-linux-gnu/libfluidsynth.so*
-      - usr/lib/x86_64-linux-gnu/libinstpatch-1.0.so*
-      - usr/lib/x86_64-linux-gnu/libjack.so*
-      - usr/lib/x86_64-linux-gnu/libmodplug.so*
-      - usr/lib/x86_64-linux-gnu/libopusfile.so*
-      - usr/lib/x86_64-linux-gnu/libSDL2-2.0.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor-0.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfluidsynth.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libinstpatch-1.0.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libjack.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libmodplug.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libopusfile.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libSDL2-2.0.so*
