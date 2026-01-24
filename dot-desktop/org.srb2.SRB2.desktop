@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Sonic Robo Blast 2
+Name=SRB2 [Kyu]
 Comment=A 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy
 TryExec=srb2
-Exec=${SNAP}/usr/games/SRB2/lsdlsrb2
-Icon=${SNAP}/usr/share/icons/hicolor/scalable/apps/srb2.png
+Exec=release.sh
+Icon=org.srb2.SRB2
 Terminal=false
 Categories=Game;

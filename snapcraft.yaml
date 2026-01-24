@@ -10,14 +10,16 @@ platforms:
     build-for: [arm64]
 summary: A 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy
 description: |
-  Sonic Robo Blast 2 is a 3D open-source Sonic the Hedgehog fangame built using a modified version of the Doom Legacy port of Doom. SRB2 is closely inspired by the original Sonic games from the Sega Genesis, and attempts to recreate the design in 3D. It features tons of levels, enemies, speed, and quite a lot of the fun that the original Sonic games provided.
+  Sonic Robo Blast 2 is a 3D open-source Sonic the Hedgehog fangame built using a modified version of the Doom Legacy port of Doom.
+  SRB2 is closely inspired by the original Sonic games from the Sega Genesis, and attempts to recreate the design in 3D. It features tons of levels, enemies, speed, and quite a lot of the fun that the original Sonic games provided.
 grade: stable
 confinement: strict
+icon: srb2.png
 
 apps:
   srb2:
     command: usr/games/SRB2/lsdlsrb2
-    desktop: usr/share/applications/srb2.desktop
+    desktop: org.srb2.SRB2.desktop
     common-id: org.srb2.SRB2
     environment:
       HOME: $SNAP_USER_COMMON
@@ -40,7 +42,7 @@ plugs:
     private: true
 
 parts:
-  srb2:
+  srb2-app:
     plugin: cmake
     source: https://github.com/STJr/SRB2.git
     source-tag: SRB2_release_2.2.15
@@ -64,35 +66,21 @@ parts:
       - -DSRB2_SDL2_EXE_NAME=lsdlsrb2
 
   srb2assets:
-    after: [srb2]
+    after: [srb2-app]
     plugin: dump
     source: https://github.com/STJr/SRB2/releases/download/SRB2_release_2.2.15/SRB2-v2215-Full.zip
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/games/SRB2
-      mv -f models $CRAFT_PART_INSTALL/usr/games/SRB2/
-      mv -f characters.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
-      mv -f models.dat $CRAFT_PART_INSTALL/usr/games/SRB2/
-      mv -f music.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
-      mv -f srb2.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
-      mv -f zones.pk3 $CRAFT_PART_INSTALL/usr/games/SRB2/
+    organize:
+      models: usr/games/SRB2/models
+      characters.pk3: usr/games/SRB2/characters.pk3
+      models.dat: usr/games/SRB2/models.dat
+      music.pk3: usr/games/SRB2/music.pk3
+      srb2.pk3: usr/games/SRB2/srb2.pk3
+      zones.pk3: usr/games/SRB2/zones.pk3
     prime:
       - usr/games/SRB2
 
-  srb2-gui-launcher:
-    after: [srb2assets]
-    plugin: nil
-    source: ./gui-launcher
-    override-build: |
-      mkdir -p $CRAFT_PART_INSTALL/usr/share/applications/
-      mkdir -p $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
-      mv -f srb2.desktop $CRAFT_PART_INSTALL/usr/share/applications/
-      mv -f srb2.png $CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps
-    prime:
-      - usr/share/applications/srb2.desktop
-      - usr/share/icons/hicolor/scalable/apps/srb2.png
-
   dependencies:
-    after: [srb2-gui-launcher]
+    after: [srb2assets]
     plugin: nil
     stage-packages:
       - libsdl2-2.0-0
@@ -110,3 +98,10 @@ parts:
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libmodplug.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libopusfile.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libSDL2-2.0.so*
+
+  dot-desktop:
+    after: [dependencies]
+    plugin: dump
+    source: ./dot-desktop
+    prime:
+      - org.srb2.SRB2.desktop
