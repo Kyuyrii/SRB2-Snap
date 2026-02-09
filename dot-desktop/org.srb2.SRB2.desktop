@@ -8,3 +8,4 @@ Exec=release.sh
 Icon=org.srb2.SRB2
 Terminal=false
 Categories=Game;
+StartupWMClass=lsdlsrb2
