@@ -90,6 +90,7 @@ parts:
       - libjack0
       - libmodplug1
       - libopusfile0
+      - libcurl4t64
     prime:
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libdecor-0.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libfluidsynth.so*
@@ -98,6 +99,7 @@ parts:
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libmodplug.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libopusfile.so*
       - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libSDL2-2.0.so*
+      - usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/libcurl.so*
 
   dot-desktop:
     after: [dependencies]
